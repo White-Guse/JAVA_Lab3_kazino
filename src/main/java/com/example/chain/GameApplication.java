@@ -31,29 +31,40 @@ public class GameApplication extends Application {
         stage.setTitle("Игровой автомат");
 
         BorderPane root = new BorderPane();
-        root.setPadding(new Insets(20));
-        root.setStyle("-fx-background-color: #f3eadc;");
+        root.setPadding(new Insets(18, 28, 24, 28));
+        root.setStyle("-fx-background-color: linear-gradient(to bottom, #fff6e7, #f1dec2);");
+
+        Label gameName = new Label("ИГРОВОЙ АВТОМАТ");
+        gameName.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #80532d;");
 
         Label title = new Label("Выбери один из мешочков");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        title.setStyle("-fx-font-size: 27px; -fx-font-weight: bold; -fx-text-fill: #4b2c18;");
+
+        Label subtitle = new Label("Все мешочки одинаковые, но один из исходов может принести удачу.");
+        subtitle.setStyle("-fx-font-size: 13px; -fx-text-fill: #775d48;");
+
+        coinsLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #6a421f;");
+        infoLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: #6a5746; -fx-padding: 8 14 8 14; "
+                + "-fx-background-color: #fffaf2; -fx-background-radius: 8;");
 
         Button addCoinButton = new Button("Добавить 1 монету");
+        addCoinButton.setStyle("-fx-font-size: 14px; -fx-background-color: #f0b94f; -fx-font-weight: bold;");
         addCoinButton.setOnAction(event -> addCoin());
+        startButton.setStyle("-fx-font-size: 14px; -fx-background-color: #80a95b; -fx-text-fill: white; -fx-font-weight: bold;");
         startButton.setOnAction(event -> startGame());
 
         HBox topButtons = new HBox(10, addCoinButton, startButton);
         topButtons.setAlignment(Pos.CENTER);
 
-        VBox top = new VBox(10, title, coinsLabel, infoLabel, topButtons);
+        VBox top = new VBox(8, gameName, title, subtitle, coinsLabel, infoLabel, topButtons);
         top.setAlignment(Pos.CENTER);
         root.setTop(top);
 
-        HBox bagBox = new HBox(15);
+        HBox bagBox = new HBox(18);
         bagBox.setAlignment(Pos.CENTER);
+        bagBox.setPadding(new Insets(28, 0, 4, 0));
         for (int i = 0; i < bags.length; i++) {
-            Button bag = new Button("Мешочек " + (i + 1));
-            bag.setPrefSize(145, 100);
-            bag.setStyle("-fx-font-size: 16px; -fx-background-color: #d2a76d;");
+            Button bag = createBagButton(i + 1);
             bag.setDisable(true);
             bag.setOnAction(event -> chooseBag());
             bags[i] = bag;
@@ -62,9 +73,22 @@ public class GameApplication extends Application {
         root.setCenter(bagBox);
 
         updatePlayerInfo();
-        stage.setScene(new Scene(root, 600, 330));
+        stage.setScene(new Scene(root, 690, 420));
         stage.setResizable(false);
         stage.show();
+    }
+
+    // Создаёт кнопку, которая выглядит как мешочек.
+    private Button createBagButton(int number) {
+        Button bag = new Button("👜\nМЕШОЧЕК " + number + "\nВыбрать");
+        bag.setPrefSize(185, 145);
+        bag.setMinSize(185, 145);
+        bag.setWrapText(true);
+        bag.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4b2c18; "
+                + "-fx-background-color: linear-gradient(to bottom, #e6b46e, #c98843); "
+                + "-fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: #9d612d; "
+                + "-fx-border-width: 2; -fx-cursor: hand;");
+        return bag;
     }
 
     // Добавляет игроку одну монету.
