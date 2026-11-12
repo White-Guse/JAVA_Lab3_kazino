@@ -16,7 +16,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Polygon;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -83,8 +87,6 @@ public class GameApplication extends Application {
         stage.setResizable(false);
         stage.show();
     }
-
-    // Создаёт кнопку, которая выглядит как мешочек.
     private Button createBagButton(int number) {
         Pane picture = createBagPicture();
 
@@ -108,31 +110,47 @@ public class GameApplication extends Application {
         Pane picture = new Pane();
         picture.setPrefSize(135, 118);
 
-        Polygon body = new Polygon(
-                25, 112,
-                15, 73,
-                38, 48,
-                43, 26,
-                92, 26,
-                97, 48,
-                120, 73,
-                110, 112
+        Path body = new Path(
+                new MoveTo(47, 42),
+                new CubicCurveTo(45, 54, 26, 58, 21, 74),
+                new CubicCurveTo(17, 91, 29, 111, 31, 112),
+                new LineTo(104, 112),
+                new CubicCurveTo(106, 111, 118, 91, 114, 74),
+                new CubicCurveTo(109, 58, 90, 54, 88, 42),
+                new ClosePath()
         );
-        body.setFill(Color.web("#c9853d"));
+        body.setFill(Color.web("#cf9857"));
         body.setStroke(Color.web("#82491f"));
         body.setStrokeWidth(2);
 
-        Rectangle tie = new Rectangle(38, 43, 59, 8);
+        Rectangle neck = new Rectangle(47, 23, 41, 22);
+        neck.setArcWidth(10);
+        neck.setArcHeight(10);
+        neck.setFill(Color.web("#d7a665"));
+        neck.setStroke(Color.web("#82491f"));
+        neck.setStrokeWidth(2);
+
+        Rectangle tie = new Rectangle(40, 40, 55, 8);
         tie.setArcWidth(6);
         tie.setArcHeight(6);
         tie.setFill(Color.web("#75401c"));
 
-        Circle knot = new Circle(67, 47, 8, Color.web("#e2b66d"));
+        Circle knot = new Circle(67, 44, 8, Color.web("#e8c176"));
         knot.setStroke(Color.web("#75401c"));
+
+        Path leftFold = new Path(new MoveTo(42, 64), new CubicCurveTo(35, 79, 37, 91, 43, 101));
+        leftFold.setFill(Color.TRANSPARENT);
+        leftFold.setStroke(Color.web("#b6793e"));
+        leftFold.setStrokeWidth(2);
+
+        Path rightFold = new Path(new MoveTo(93, 64), new CubicCurveTo(100, 79, 98, 91, 92, 101));
+        rightFold.setFill(Color.TRANSPARENT);
+        rightFold.setStroke(Color.web("#b6793e"));
+        rightFold.setStrokeWidth(2);
 
         StackPane coin = new StackPane();
         coin.setLayoutX(53);
-        coin.setLayoutY(68);
+        coin.setLayoutY(71);
         coin.setPrefSize(28, 28);
         coin.setStyle("-fx-background-color: #f1c94d; -fx-background-radius: 20; -fx-border-color: #a97617; "
                 + "-fx-border-radius: 20; -fx-border-width: 2;");
@@ -140,7 +158,7 @@ public class GameApplication extends Application {
         coinText.setStyle("-fx-font-weight: bold; -fx-text-fill: #865b11;");
         coin.getChildren().add(coinText);
 
-        picture.getChildren().addAll(body, tie, knot, coin);
+        picture.getChildren().addAll(body, neck, tie, knot, leftFold, rightFold, coin);
         return picture;
     }
 
