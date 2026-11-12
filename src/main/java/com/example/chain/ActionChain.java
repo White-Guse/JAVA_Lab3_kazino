@@ -7,7 +7,7 @@ public class ActionChain {
     private final Random random = new Random();
 
     public ActionChain() {
-        chain = new LossHandler(new WinHandler(null));
+        chain = new LossHandler(new WinHandler(new ChanceHandler(null)));
     }
 
     // Разыгрывает один результат и запускает цепочку обработчиков.
@@ -17,9 +17,14 @@ public class ActionChain {
     }
 
     private ResultType getRandomType() {
-        if (random.nextBoolean()) {
+        int value = random.nextInt(10);
+
+        if (value < 4) {
             return ResultType.LOSS;
         }
-        return ResultType.WIN;
+        if (value < 7) {
+            return ResultType.WIN;
+        }
+        return ResultType.CHANCE;
     }
 }
