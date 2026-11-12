@@ -11,7 +11,13 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -80,15 +86,62 @@ public class GameApplication extends Application {
 
     // Создаёт кнопку, которая выглядит как мешочек.
     private Button createBagButton(int number) {
-        Button bag = new Button("👜\nМЕШОЧЕК " + number + "\nВыбрать");
-        bag.setPrefSize(185, 145);
-        bag.setMinSize(185, 145);
-        bag.setWrapText(true);
-        bag.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #4b2c18; "
-                + "-fx-background-color: linear-gradient(to bottom, #e6b46e, #c98843); "
-                + "-fx-background-radius: 16; -fx-border-radius: 16; -fx-border-color: #9d612d; "
-                + "-fx-border-width: 2; -fx-cursor: hand;");
+        Pane picture = createBagPicture();
+
+        Label text = new Label("МЕШОЧЕК " + number + "\nВыбрать");
+        text.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #4b2c18; -fx-text-alignment: center;");
+
+        VBox content = new VBox(0, picture, text);
+        content.setAlignment(Pos.CENTER);
+
+        Button bag = new Button();
+        bag.setGraphic(content);
+        bag.setPrefSize(185, 170);
+        bag.setMinSize(185, 170);
+        bag.setStyle("-fx-background-color: #f8e7cc; -fx-background-radius: 16; -fx-border-radius: 16; "
+                + "-fx-border-color: #c99053; -fx-border-width: 2; -fx-cursor: hand;");
         return bag;
+    }
+
+    // Рисует простую фигуру мешочка из стандартных JavaFX-форм.
+    private Pane createBagPicture() {
+        Pane picture = new Pane();
+        picture.setPrefSize(135, 118);
+
+        Polygon body = new Polygon(
+                25, 112,
+                15, 73,
+                38, 48,
+                43, 26,
+                92, 26,
+                97, 48,
+                120, 73,
+                110, 112
+        );
+        body.setFill(Color.web("#c9853d"));
+        body.setStroke(Color.web("#82491f"));
+        body.setStrokeWidth(2);
+
+        Rectangle tie = new Rectangle(38, 43, 59, 8);
+        tie.setArcWidth(6);
+        tie.setArcHeight(6);
+        tie.setFill(Color.web("#75401c"));
+
+        Circle knot = new Circle(67, 47, 8, Color.web("#e2b66d"));
+        knot.setStroke(Color.web("#75401c"));
+
+        StackPane coin = new StackPane();
+        coin.setLayoutX(53);
+        coin.setLayoutY(68);
+        coin.setPrefSize(28, 28);
+        coin.setStyle("-fx-background-color: #f1c94d; -fx-background-radius: 20; -fx-border-color: #a97617; "
+                + "-fx-border-radius: 20; -fx-border-width: 2;");
+        Label coinText = new Label("1");
+        coinText.setStyle("-fx-font-weight: bold; -fx-text-fill: #865b11;");
+        coin.getChildren().add(coinText);
+
+        picture.getChildren().addAll(body, tie, knot, coin);
+        return picture;
     }
 
     // Добавляет игроку одну монету.
